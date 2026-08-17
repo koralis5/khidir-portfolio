@@ -1,9 +1,10 @@
-import "server-only";
-
+// No "server-only" import here deliberately: this module is loaded by
+// middleware.ts, which Vercel bundles as an Edge Function, and the
+// server-only package's browser-guard trick breaks Edge Function bundling.
+// Safe to omit — this file is never imported from a client component.
+//
 // Uses the Web Crypto API (crypto.subtle) rather than Node's `crypto` module
-// so this works in the Edge Runtime — required because middleware.ts imports
-// this and Vercel builds middleware as an Edge Function, which doesn't
-// support Node built-ins.
+// so this works in the Edge Runtime too.
 
 export const ADMIN_COOKIE_NAME = "admin_session";
 const SESSION_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000;
