@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fff8fc;
+  --foreground: #3a4256;
+  --surface: #ffffff;
+  --surface-muted: #ffeaf5;
+  --border: #ffd9ec;
+
+  --brand-blue: #a9e0ff;
+  --brand-blue-deep: #4fbeff;
+  --brand-pink: #ffb3dd;
+  --brand-pink-deep: #ff6fb8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-deep: var(--brand-blue-deep);
+  --color-brand-pink: var(--brand-pink);
+  --color-brand-pink-deep: var(--brand-pink-deep);
+
+  --font-display: var(--font-fredoka);
+  --font-sans: var(--font-nunito);
 }
 
 body {
-  background: var(--background);
+  background: radial-gradient(
+      ellipse 60% 45% at 10% 0%,
+      color-mix(in srgb, var(--brand-blue) 55%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 55% 40% at 95% 8%,
+      color-mix(in srgb, var(--brand-pink) 55%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 70% 40% at 50% 105%,
+      color-mix(in srgb, var(--brand-pink) 35%, transparent),
+      color-mix(in srgb, var(--brand-blue) 30%, transparent) 60%,
+      transparent 85%
+    ),
+    var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px -12px color-mix(in srgb, var(--brand-blue-deep) 25%, transparent);
+}
+
+.candy-shadow {
+  box-shadow: 0 10px 24px -8px color-mix(in srgb, var(--brand-pink-deep) 45%, transparent);
 }
