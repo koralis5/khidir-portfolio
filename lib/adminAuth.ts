@@ -1,10 +1,14 @@
-// No "server-only" import here deliberately: this module is loaded by
-// middleware.ts, which Vercel bundles as an Edge Function, and the
-// server-only package's browser-guard trick breaks Edge Function bundling.
-// Safe to omit — this file is never imported from a client component.
+import "server-only";
+
+// Session *verification* is NOT here — it's inlined directly in
+// middleware.ts. Vercel's Edge Function bundler fails the build if
+// middleware.ts imports any local project module (see middleware.ts for
+// detail), so this file is only used by the login/logout API routes
+// (regular Node.js runtime, not Edge), where that constraint doesn't apply
+// and the server-only guard is safe to keep.
 //
-// Uses the Web Crypto API (crypto.subtle) rather than Node's `crypto` module
-// so this works in the Edge Runtime too.
+// Uses the Web Crypto API (crypto.subtle) rather than Node's `crypto`
+// module — not required here, but kept consistent with middleware.ts.
 
 export const ADMIN_COOKIE_NAME = "admin_session";
 const SESSION_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000;
@@ -33,17 +37,6 @@ function constantTimeEqual(a: string, b: string): boolean {
 export async function createSessionToken(): Promise<string> {
   const expires = String(Date.now() + SESSION_LIFETIME_MS);
   return `${expires}.${await hmac(expires)}`;
-}
-
-export async function verifySessionToken(token: string | undefined | null): Promise<boolean> {
-  if (!token) return false;
-  const [expires, sig] = token.split(".");
-  if (!expires || !sig) return false;
-
-  const expected = await hmac(expires);
-  if (!constantTimeEqual(sig, expected)) return false;
-
-  return Number(expires) > Date.now();
 }
 
 export async function checkPassword(candidate: string): Promise<boolean> {
