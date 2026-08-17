@@ -1,0 +1,15 @@
+name: Nightly knowledge base review
+
+on:
+  schedule:
+    - cron: "0 18 * * *" # 18:00 UTC = 2:00 AM SGT
+  workflow_dispatch: {} # lets you trigger it manually from the Actions tab too
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call /api/cron/review
+        run: |
+          curl -sf -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "${{ secrets.SITE_URL }}/api/cron/review"
